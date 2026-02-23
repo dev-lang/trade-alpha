@@ -10,16 +10,26 @@ let maxReconnectDelay = 10000;
 let reconnectAttempts = 0;
 let maxReconnectAttempts = 10;
 
+function setWsState(text, className) {
+    const status = document.querySelector(".ws-status");
+
+    status.classList.add("fade");
+
+    setTimeout(() => {
+        wsText.innerText = text;
+        wsDot.className = "ws-dot " + className;
+        status.classList.remove("fade");
+    }, 120);
+}
+
 function connectWebSocket() {
 
-    wsDot.className = "ws-dot ws-connecting";
-    wsText.innerText = "CONNECTING";
+    setWsState("CONNECTING", "ws-connecting");
 
     socket = new WebSocket("ws://127.0.0.1:8000/ws");
 
     socket.onopen = function() {
-        wsDot.className = "ws-dot ws-connected";
-        wsText.innerText = "CONNECTED";
+        setWsState("CONNECTED", "ws-connected");
         reconnectDelay = 2000;
         reconnectAttempts = 0;
     };
@@ -37,13 +47,11 @@ function connectWebSocket() {
         reconnectAttempts++;
 
         if (reconnectAttempts >= maxReconnectAttempts) {
-            wsDot.className = "ws-dot ws-disconnected";
-            wsText.innerText = "DISCONNECTED";
+            setWsState("DISCONNECTED", "ws-disconnected");
             return;
         }
 
-        wsDot.className = "ws-dot ws-connecting";
-        wsText.innerText = "RECONNECTING";
+        setWsState("RECONNECTING", "ws-connecting");
 
         setTimeout(() => {
             reconnectDelay = Math.min(reconnectDelay * 1.5, maxReconnectDelay);

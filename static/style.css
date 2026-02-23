@@ -251,6 +251,13 @@ body {
     font-size: 12px;
     letter-spacing: 0.5px;
     color: #888;
+    transition: opacity 0.35s ease, transform 0.25s ease;
+}
+
+/* Fade suave cuando cambia estado */
+.ws-status.fade {
+    opacity: 0.3;
+    transform: translateY(-2px);
 }
 
 .ws-dot {
@@ -267,12 +274,25 @@ body {
     box-shadow: 0 0 4px rgba(0,200,100,0.6);
 }
 
-.ws-connecting {
-    background-color: #d6a800;
-    box-shadow: 0 0 4px rgba(214,168,0,0.6);
-}
-
 .ws-disconnected {
     background-color: #cc3333;
     box-shadow: 0 0 4px rgba(200,50,50,0.6);
+}
+
+.ws-connecting {
+    background-color: #d6a800;
+    animation: wsPulse 1.3s infinite ease-in-out;
+}
+
+/* Pulso suave mientras reconecta */
+@keyframes wsPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(214,168,0, 0.6);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(214,168,0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(214,168,0, 0);
+    }
 }
