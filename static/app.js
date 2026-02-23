@@ -1,30 +1,60 @@
 let previousMid = null;
 
-const socket = new WebSocket("ws://127.0.0.1:8000/ws");
-
 const clockDiv = document.getElementById("clock");
 const wsDot = document.getElementById("wsDot");
 const wsText = document.getElementById("wsText");
 
-socket.onopen = function() {
-    wsDot.className = "ws-dot ws-connected";
-    wsText.innerText = "CONNECTED";
-};
+let socket = null;
+let reconnectDelay = 2000;
+let maxReconnectDelay = 10000;
+let reconnectAttempts = 0;
+let maxReconnectAttempts = 10;
 
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    renderBook(data);
-};
+function connectWebSocket() {
 
-socket.onerror = function() {
-    wsDot.className = "ws-dot ws-disconnected";
-    wsText.innerText = "ERROR";
-};
+    wsDot.className = "ws-dot ws-connecting";
+    wsText.innerText = "CONNECTING";
 
-socket.onclose = function() {
-    wsDot.className = "ws-dot ws-disconnected";
-    wsText.innerText = "DISCONNECTED";
-};
+    socket = new WebSocket("ws://127.0.0.1:8000/ws");
+
+    socket.onopen = function() {
+        wsDot.className = "ws-dot ws-connected";
+        wsText.innerText = "CONNECTED";
+        reconnectDelay = 2000;
+        reconnectAttempts = 0;
+    };
+
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        renderBook(data);
+    };
+
+    socket.onerror = function() {
+    };
+
+    socket.onclose = function() {
+
+        reconnectAttempts++;
+
+        if (reconnectAttempts >= maxReconnectAttempts) {
+            wsDot.className = "ws-dot ws-disconnected";
+            wsText.innerText = "DISCONNECTED";
+            return;
+        }
+
+        wsDot.className = "ws-dot ws-connecting";
+        wsText.innerText = "RECONNECTING";
+
+        setTimeout(() => {
+            reconnectDelay = Math.min(reconnectDelay * 1.5, maxReconnectDelay);
+            connectWebSocket();
+        }, reconnectDelay);
+    };
+
+}
+
+// iniciar conexión
+connectWebSocket();
 
 let previousBids = [];
 let previousAsks = [];
