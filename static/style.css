@@ -1,0 +1,291 @@
+body {
+    background-color: #000000;
+    color: #c0c0c0;
+    font-family: Consolas, Courier New, monospace;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 8px 12px;
+    border-bottom: 1px solid #444;
+}
+
+.instrument {
+    font-size: 18px;
+    color: #00ff00;
+    font-weight: bold;
+}
+
+.last-price {
+    font-size: 20px;
+    color: #ffff00;
+    font-weight: bold;
+}
+
+.spread {
+    font-size: 14px;
+    color: #aaa;
+}
+
+.clock {
+    font-size: 14px;
+}
+
+.book-container {
+    display: flex;
+    height: 400px;
+    border-bottom: 1px solid #444;
+}
+
+.column {
+    flex: 1;
+    border-right: 1px solid #333;
+    padding: 5px;
+    overflow-y: auto;
+}
+
+.column:last-child {
+    border-right: none;
+}
+
+.title {
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px solid #444;
+    margin-bottom: 5px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 4px;
+    font-size: 14px;
+}
+
+.bids .row {
+    color: #00ff00;
+}
+
+.asks .row {
+    color: #ff3333;
+}
+
+.prices .row {
+    color: #ffff00;
+    text-align: center;
+}
+
+.row:hover {
+    background-color: #111;
+}
+
+.tape {
+    height: 60px;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-bottom: 1px solid #444;
+    padding: 5px;
+    font-size: 13px;
+    color: #00ffff;
+}
+
+.order-entry {
+    padding: 10px;
+}
+
+.order-entry input,
+.order-entry select,
+.order-entry button {
+    background: #111;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 4px;
+    margin-right: 5px;
+    font-family: Consolas, monospace;
+}
+
+.order-entry button {
+    cursor: pointer;
+}
+
+.order-entry button:hover {
+    background: #222;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 6px;
+    font-size: 14px;
+}
+
+.bids .row span:first-child {
+    color: #00ff00;
+}
+
+.bids .row span:last-child {
+    color: #ffff00;
+}
+
+.asks .row span:first-child {
+    color: #ffff00;
+}
+
+.asks .row span:last-child {
+    color: #ff3333;
+}
+
+.book-wrapper {
+    width: 100%;
+    height: 450px;
+    border-bottom: 1px solid #333;
+    font-size: 14px;
+}
+
+.book-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 20px 1fr 1fr;
+    border-bottom: 1px solid #444;
+    padding: 4px 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.book-rows {
+    display: grid;
+    grid-auto-rows: 22px;
+    overflow-y: auto;
+}
+
+.book-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 20px 1fr 1fr;
+    padding: 2px 6px;
+    align-items: center;
+}
+
+.book-row:hover {
+    background-color: #111;
+}
+
+.bid-qty {
+    color: #00ff00;
+    text-align: left;
+}
+
+.bid-price {
+    color: #ffff00;
+    text-align: right;
+}
+
+.separator {
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+}
+
+.ask-price {
+    color: #ffff00;
+    text-align: left;
+}
+
+.ask-qty {
+    color: #ff3333;
+    text-align: right;
+}
+
+.book-rows {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* CENTRA EL SPREAD */
+    height: 100%;
+}
+
+.depth-bid {
+    transition: background 0.2s ease;
+}
+
+.depth-ask {
+    transition: background 0.2s ease;
+}
+
+/* BEST BID / ASK */
+.best {
+    border: 1px solid white;
+}
+
+.best-price {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* PARPADEO */
+.flash-green {
+    animation: flashGreen 0.4s ease;
+}
+
+.flash-red {
+    animation: flashRed 0.4s ease;
+}
+
+@keyframes flashGreen {
+    0% { background-color: rgba(0,255,0,0.8); }
+    100% { background-color: transparent; }
+}
+
+@keyframes flashRed {
+    0% { background-color: rgba(255,0,0,0.8); }
+    100% { background-color: transparent; }
+}
+
+/* ANIMACIÓN ENTRADA */
+.animate-in {
+    animation: fadeInRow 0.15s ease;
+}
+
+@keyframes fadeInRow {
+    from {
+        opacity: 0;
+        transform: translateY(3px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mid-line {
+    text-align: center;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 4px 0;
+    border-top: 1px solid #555;
+    border-bottom: 1px solid #555;
+    background-color: #111;
+    letter-spacing: 1px;
+}
+
+.mid-line span {
+    color: #ffff00;
+}
+
+.mid-up {
+    color: #00ff00;
+}
+
+.mid-down {
+    color: #ff3333;
+}
+
+.mid-flash {
+    animation: midFlash 0.4s ease;
+}
+
+@keyframes midFlash {
+    0% { background-color: #222; }
+    100% { background-color: #111; }
+}

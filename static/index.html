@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Rueda CAM1 - UST/ART</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="header">
+    <div class="instrument">UST / ART</div>
+    <div class="last-price" id="lastPrice">1.370</div>
+    <div class="spread" id="spread">Spread: 0.003</div>
+    <div class="clock" id="clock"></div>
+</div>
+
+<div class="book-wrapper">
+
+    <div class="book-header">
+        <div class="col">Cantidad Bid</div>
+        <div class="col">Precio</div>
+        <div class="col separator"></div>
+        <div class="col">Precio</div>
+        <div class="col">Cantidad Offer</div>
+    </div>
+
+    <div class="mid-line" id="midLine">
+    MID 0.000
+    </div>
+
+    <div id="bookRows" class="book-rows"></div>
+
+</div>
+
+<div class="tape" id="tape">
+    <!-- Trades en vivo -->
+</div>
+
+<div class="order-entry">
+    <h3>Ingresar Orden</h3>
+    <form id="orderForm">
+        <input type="number" id="user_id" placeholder="User ID" required>
+        <select id="side">
+            <option value="buy">BUY</option>
+            <option value="sell">SELL</option>
+        </select>
+        <input type="number" step="0.001" id="price" placeholder="Precio" required>
+        <input type="number" step="1" id="quantity" placeholder="Cantidad" required>
+        <button type="submit">Enviar</button>
+    </form>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
