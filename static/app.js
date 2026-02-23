@@ -2,16 +2,10 @@ let previousMid = null;
 
 const socket = new WebSocket("ws://127.0.0.1:8000/ws");
 
-const bidsDiv = document.getElementById("bids");
-const asksDiv = document.getElementById("asks");
-const pricesDiv = document.getElementById("prices");
-const lastPriceDiv = document.getElementById("lastPrice");
-const spreadDiv = document.getElementById("spread");
 const clockDiv = document.getElementById("clock");
 
 socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
-
     renderBook(data);
 };
 
@@ -61,15 +55,20 @@ function renderBook(data) {
         const isBestBid = bid && bids[0] && bid.price === bids[0].price;
         const isBestAsk = ask && asks[0] && ask.price === asks[0].price;
 
+        // -------- DETECCIÓN SEGURA DE CAMBIOS --------
+
+        const previousBidLevel = previousBids?.find(b => b.price === bid?.price);
+        const previousAskLevel = previousAsks?.find(a => a.price === ask?.price);
+
         const bidChanged =
-            bid && previousBids.find(b => b.price === bid.price)?.quantity !== bid.quantity;
+            bid && previousBidLevel && previousBidLevel.quantity !== bid.quantity;
 
         const askChanged =
-            ask && previousAsks.find(a => a.price === ask.price)?.quantity !== ask.quantity;
+            ask && previousAskLevel && previousAskLevel.quantity !== ask.quantity;
 
         row.innerHTML = `
             <div class="bid-qty depth-bid ${isBestBid ? 'best' : ''} ${bidChanged ? 'flash-green' : ''}"
-                 style="background: linear-gradient(to right, rgba(0,255,0,0.4) ${bidIntensity}%, transparent ${bidIntensity}%);">
+                 style="background: linear-gradient(to right, rgba(0,200,100,0.18) ${bidIntensity}%, transparent ${bidIntensity}%);">
                  ${bid ? formatNumber(bid.quantity) : ""}
             </div>
 
@@ -84,7 +83,7 @@ function renderBook(data) {
             </div>
 
             <div class="ask-qty depth-ask ${isBestAsk ? 'best' : ''} ${askChanged ? 'flash-red' : ''}"
-                 style="background: linear-gradient(to left, rgba(255,0,0,0.4) ${askIntensity}%, transparent ${askIntensity}%);">
+                 style="background: linear-gradient(to left, rgba(200,50,50,0.18) ${askIntensity}%, transparent ${askIntensity}%);">
                  ${ask ? formatNumber(ask.quantity) : ""}
             </div>
         `;
@@ -92,57 +91,68 @@ function renderBook(data) {
         container.appendChild(row);
     }
 
-    previousBids = bids;
-    previousAsks = asks;
+    // -------- COPIA SEGURA PARA SIGUIENTE TICK --------
+
+    previousBids = JSON.parse(JSON.stringify(bids));
+    previousAsks = JSON.parse(JSON.stringify(asks));
+
+    // -------- MID & SPREAD --------
 
     if (bids.length > 0 && asks.length > 0) {
-    const bestBid = bids[0].price;
-    const bestAsk = asks[0].price;
 
-    const mid = (bestBid + bestAsk) / 2;
-    const spread = bestAsk - bestBid;
+        const bestBid = bids[0].price;
+        const bestAsk = asks[0].price;
 
-    const midLine = document.getElementById("midLine");
+        const mid = (bestBid + bestAsk) / 2;
+        const spread = bestAsk - bestBid;
 
-    let direction = "";
-    let directionClass = "";
+        const midLine = document.getElementById("midLine");
 
-    if (previousMid !== null) {
-        if (mid > previousMid) {
-            direction = " ↑";
-            directionClass = "mid-up";
-        } else if (mid < previousMid) {
-            direction = " ↓";
-            directionClass = "mid-down";
+        let direction = "";
+        let directionClass = "";
+
+        if (previousMid !== null) {
+            if (mid > previousMid) {
+                direction = " ↑";
+                directionClass = "mid-up";
+            } else if (mid < previousMid) {
+                direction = " ↓";
+                directionClass = "mid-down";
+            }
         }
+
+        midLine.classList.remove("mid-up", "mid-down", "mid-flash");
+
+        if (directionClass) {
+            midLine.classList.add(directionClass);
+            midLine.classList.add("mid-flash");
+        }
+
+        midLine.innerHTML =
+            `MID <span>${mid.toFixed(3)}</span>${direction} | Spread ${spread.toFixed(3)}`;
+
+        previousMid = mid;
     }
-
-    midLine.classList.remove("mid-up", "mid-down", "mid-flash");
-
-    if (directionClass) {
-        midLine.classList.add(directionClass);
-        midLine.classList.add("mid-flash");
-    }
-
-    midLine.innerHTML =
-        `MID <span>${mid.toFixed(3)}</span>${direction} | Spread ${spread.toFixed(3)}`;
-
-    previousMid = mid;
-}
 }
 
 function formatNumber(num) {
     return Number(num).toLocaleString("en-US");
 }
 
-// Reloj en vivo
+// -------- RELOJ MERCADO --------
+
 setInterval(() => {
     const now = new Date();
-    clockDiv.innerText = now.toLocaleTimeString();
-}, 1000);
 
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+    const ms = String(now.getMilliseconds()).padStart(3, '0');
 
-// ---------------- ORDER FORM ----------------
+    clockDiv.innerText = `${hh}:${mm}:${ss}.${ms}`;
+}, 50);
+
+// -------- ORDER FORM --------
 
 document.getElementById("orderForm").addEventListener("submit", async function(e) {
     e.preventDefault();

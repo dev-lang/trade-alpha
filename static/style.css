@@ -1,98 +1,222 @@
 body {
     background-color: #000000;
-    color: #c0c0c0;
-    font-family: Consolas, Courier New, monospace;
+    color: #b8b8b8;
+    font-family: Consolas, "Courier New", monospace;
+    font-variant-numeric: tabular-nums;
     margin: 0;
     padding: 0;
 }
+
+/* ================= HEADER ================= */
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #111;
+    background: #0d0d0d;
     padding: 8px 12px;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid #222;
 }
 
 .instrument {
     font-size: 18px;
-    color: #00ff00;
+    color: #00cc66;
     font-weight: bold;
 }
 
 .last-price {
     font-size: 20px;
-    color: #ffff00;
+    color: #e6d200;
     font-weight: bold;
 }
 
 .spread {
     font-size: 14px;
-    color: #aaa;
+    color: #888;
 }
 
 .clock {
     font-size: 14px;
+    color: #aaa;
 }
 
-.book-container {
-    display: flex;
-    height: 400px;
-    border-bottom: 1px solid #444;
+/* ================= BOOK WRAPPER ================= */
+
+.book-wrapper {
+    width: 100%;
+    height: 450px;
+    border-bottom: 1px solid #222;
+    font-size: 14px;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
 }
 
-.column {
-    flex: 1;
-    border-right: 1px solid #333;
-    padding: 5px;
-    overflow-y: auto;
-}
+/* HEADER COLUMNAS */
 
-.column:last-child {
-    border-right: none;
-}
-
-.title {
+.book-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 20px 1fr 1fr;
+    border-bottom: 1px solid #222;
+    padding: 4px 0;
     text-align: center;
     font-weight: bold;
-    border-bottom: 1px solid #444;
-    margin-bottom: 5px;
+    color: #888;
 }
 
-.row {
+/* FILAS */
+
+.book-rows {
     display: flex;
-    justify-content: space-between;
-    padding: 2px 4px;
-    font-size: 14px;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
 }
 
-.bids .row {
-    color: #00ff00;
+.book-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 20px 1fr 1fr;
+    padding: 2px 6px;
+    align-items: center;
+    transition: background 0.2s ease;
 }
 
-.asks .row {
-    color: #ff3333;
+.book-row:hover {
+    background-color: #0f0f0f;
 }
 
-.prices .row {
-    color: #ffff00;
+/* COLUMNA CENTRAL */
+
+.separator {
+    border-left: 1px solid #222;
+    border-right: 1px solid #222;
+}
+
+/* COLORES MÁS SUAVES */
+
+.bid-qty {
+    color: #00cc66;
+    text-align: left;
+}
+
+.bid-price {
+    color: #e6d200;
+    text-align: right;
+}
+
+.ask-price {
+    color: #e6d200;
+    text-align: left;
+}
+
+.ask-qty {
+    color: #cc3333;
+    text-align: right;
+}
+
+/* PROFUNDIDAD MÁS SUAVE */
+
+.depth-bid {
+    transition: background 0.3s ease;
+}
+
+.depth-ask {
+    transition: background 0.3s ease;
+}
+
+/* BEST BID / ASK MÁS ELEGANTE */
+
+.best {
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+}
+
+.best-price {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* PARPADEO MÁS SUAVE */
+
+.flash-green {
+    animation: flashGreen 0.6s ease-out;
+}
+
+.flash-red {
+    animation: flashRed 0.6s ease-out;
+}
+
+@keyframes flashGreen {
+    0% { background-color: rgba(0,200,100,0.35); }
+    100% { background-color: transparent; }
+}
+
+@keyframes flashRed {
+    0% { background-color: rgba(200,50,50,0.35); }
+    100% { background-color: transparent; }
+}
+
+/* ENTRADA MÁS ELEGANTE */
+
+.animate-in {
+    animation: fadeInRow 0.25s ease-out;
+}
+
+@keyframes fadeInRow {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* MID LINE MÁS INSTITUCIONAL */
+
+.mid-line {
     text-align: center;
+    color: #cccccc;
+    font-weight: bold;
+    padding: 4px 0;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+    background-color: #0d0d0d;
+    letter-spacing: 1px;
 }
 
-.row:hover {
-    background-color: #111;
+.mid-line span {
+    color: #e6d200;
 }
+
+.mid-up {
+    color: #00cc66;
+}
+
+.mid-down {
+    color: #cc3333;
+}
+
+.mid-flash {
+    animation: midFlash 0.7s ease-out;
+}
+
+@keyframes midFlash {
+    0% { background-color: #1a1a1a; }
+    100% { background-color: #0d0d0d; }
+}
+
+/* ================= TAPE ================= */
 
 .tape {
     height: 60px;
     overflow-x: auto;
     white-space: nowrap;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid #222;
     padding: 5px;
     font-size: 13px;
-    color: #00ffff;
+    color: #00bbbb;
 }
+
+/* ================= ORDER ENTRY ================= */
 
 .order-entry {
     padding: 10px;
@@ -101,9 +225,9 @@ body {
 .order-entry input,
 .order-entry select,
 .order-entry button {
-    background: #111;
-    color: #fff;
-    border: 1px solid #444;
+    background: #0d0d0d;
+    color: #ddd;
+    border: 1px solid #222;
     padding: 4px;
     margin-right: 5px;
     font-family: Consolas, monospace;
@@ -111,181 +235,9 @@ body {
 
 .order-entry button {
     cursor: pointer;
+    transition: background 0.2s ease;
 }
 
 .order-entry button:hover {
-    background: #222;
-}
-
-.row {
-    display: flex;
-    justify-content: space-between;
-    padding: 2px 6px;
-    font-size: 14px;
-}
-
-.bids .row span:first-child {
-    color: #00ff00;
-}
-
-.bids .row span:last-child {
-    color: #ffff00;
-}
-
-.asks .row span:first-child {
-    color: #ffff00;
-}
-
-.asks .row span:last-child {
-    color: #ff3333;
-}
-
-.book-wrapper {
-    width: 100%;
-    height: 450px;
-    border-bottom: 1px solid #333;
-    font-size: 14px;
-}
-
-.book-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 20px 1fr 1fr;
-    border-bottom: 1px solid #444;
-    padding: 4px 0;
-    text-align: center;
-    font-weight: bold;
-}
-
-.book-rows {
-    display: grid;
-    grid-auto-rows: 22px;
-    overflow-y: auto;
-}
-
-.book-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 20px 1fr 1fr;
-    padding: 2px 6px;
-    align-items: center;
-}
-
-.book-row:hover {
-    background-color: #111;
-}
-
-.bid-qty {
-    color: #00ff00;
-    text-align: left;
-}
-
-.bid-price {
-    color: #ffff00;
-    text-align: right;
-}
-
-.separator {
-    border-left: 1px solid #333;
-    border-right: 1px solid #333;
-}
-
-.ask-price {
-    color: #ffff00;
-    text-align: left;
-}
-
-.ask-qty {
-    color: #ff3333;
-    text-align: right;
-}
-
-.book-rows {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* CENTRA EL SPREAD */
-    height: 100%;
-}
-
-.depth-bid {
-    transition: background 0.2s ease;
-}
-
-.depth-ask {
-    transition: background 0.2s ease;
-}
-
-/* BEST BID / ASK */
-.best {
-    border: 1px solid white;
-}
-
-.best-price {
-    font-weight: bold;
-    color: #ffffff;
-}
-
-/* PARPADEO */
-.flash-green {
-    animation: flashGreen 0.4s ease;
-}
-
-.flash-red {
-    animation: flashRed 0.4s ease;
-}
-
-@keyframes flashGreen {
-    0% { background-color: rgba(0,255,0,0.8); }
-    100% { background-color: transparent; }
-}
-
-@keyframes flashRed {
-    0% { background-color: rgba(255,0,0,0.8); }
-    100% { background-color: transparent; }
-}
-
-/* ANIMACIÓN ENTRADA */
-.animate-in {
-    animation: fadeInRow 0.15s ease;
-}
-
-@keyframes fadeInRow {
-    from {
-        opacity: 0;
-        transform: translateY(3px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.mid-line {
-    text-align: center;
-    color: #ffffff;
-    font-weight: bold;
-    padding: 4px 0;
-    border-top: 1px solid #555;
-    border-bottom: 1px solid #555;
-    background-color: #111;
-    letter-spacing: 1px;
-}
-
-.mid-line span {
-    color: #ffff00;
-}
-
-.mid-up {
-    color: #00ff00;
-}
-
-.mid-down {
-    color: #ff3333;
-}
-
-.mid-flash {
-    animation: midFlash 0.4s ease;
-}
-
-@keyframes midFlash {
-    0% { background-color: #222; }
-    100% { background-color: #111; }
+    background: #1a1a1a;
 }
