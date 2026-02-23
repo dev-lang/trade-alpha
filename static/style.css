@@ -241,3 +241,38 @@ body {
 .order-entry button:hover {
     background: #1a1a1a;
 }
+
+/* ================= WEBSOCKET STATUS ================= */
+
+.ws-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: #888;
+}
+
+.ws-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Estados */
+
+.ws-connected {
+    background-color: #00cc66;
+    box-shadow: 0 0 4px rgba(0,200,100,0.6);
+}
+
+.ws-connecting {
+    background-color: #d6a800;
+    box-shadow: 0 0 4px rgba(214,168,0,0.6);
+}
+
+.ws-disconnected {
+    background-color: #cc3333;
+    box-shadow: 0 0 4px rgba(200,50,50,0.6);
+}

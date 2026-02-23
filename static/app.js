@@ -3,18 +3,27 @@ let previousMid = null;
 const socket = new WebSocket("ws://127.0.0.1:8000/ws");
 
 const clockDiv = document.getElementById("clock");
+const wsDot = document.getElementById("wsDot");
+const wsText = document.getElementById("wsText");
+
+socket.onopen = function() {
+    wsDot.className = "ws-dot ws-connected";
+    wsText.innerText = "CONNECTED";
+};
 
 socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
     renderBook(data);
 };
 
-socket.onerror = function(error) {
-    console.log("WebSocket error:", error);
+socket.onerror = function() {
+    wsDot.className = "ws-dot ws-disconnected";
+    wsText.innerText = "ERROR";
 };
 
 socket.onclose = function() {
-    console.log("WebSocket closed");
+    wsDot.className = "ws-dot ws-disconnected";
+    wsText.innerText = "DISCONNECTED";
 };
 
 let previousBids = [];
